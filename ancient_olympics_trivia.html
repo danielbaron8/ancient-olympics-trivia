@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trivia Game: Ancient Olympics</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            background-color: #f4f4f9;
+        }
+        .container {
+            margin: 20px auto;
+            max-width: 600px;
+            padding: 20px;
+            border-radius: 10px;
+            background: #fff;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        .question {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+        }
+        .answers {
+            list-style-type: none;
+            padding: 0;
+        }
+        .answers li {
+            margin: 10px 0;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            font-size: 1em;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background-color: #007bff;
+            color: white;
+            transition: 0.3s;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .correct {
+            background-color: #28a745 !important;
+        }
+        .wrong {
+            background-color: #dc3545 !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="game">
+            <div class="question" id="question"></div>
+            <ul class="answers" id="answers"></ul>
+        </div>
+        <button id="next" style="display:none;">Next Question</button>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                question: "איפה התקיימה האולימפיאדה בעת העתיקה?",
+                answers: ["אתונה", "ספרטה", "אולימפיה", "דלפי"],
+                correct: 2
+            },
+            {
+                question: "לכבוד איזה אל נערכו המשחקים האולימפיים?",
+                answers: ["אפולו", "זאוס", "אתנה", "הרקולס"],
+                correct: 1
+            },
+            {
+                question: "איזו תחרות נחשבה לאחת החשובות ביותר באולימפיאדה העתיקה?",
+                answers: ["קפיצה למים", "מרוץ מרכבות", "כדורגל", "ירי בחץ וקשת"],
+                correct: 1
+            },
+            {
+                question: "כמה זמן נמשכו המשחקים האולימפיים בעת העתיקה?",
+                answers: ["יום אחד", "5 ימים", "שבועיים", "חודש"],
+                correct: 1
+            }
+        ];
+
+        let currentQuestion = 0;
+
+        const questionElement = document.getElementById("question");
+        const answersElement = document.getElementById("answers");
+        const nextButton = document.getElementById("next");
+
+        function loadQuestion() {
+            const q = questions[currentQuestion];
+            questionElement.textContent = q.question;
+            answersElement.innerHTML = "";
+
+            q.answers.forEach((answer, index) => {
+                const button = document.createElement("button");
+                button.textContent = answer;
+                button.onclick = () => checkAnswer(index);
+                answersElement.appendChild(button);
+            });
+        }
+
+        function checkAnswer(selected) {
+            const q = questions[currentQuestion];
+            const buttons = answersElement.querySelectorAll("button");
+
+            buttons.forEach((button, index) => {
+                button.disabled = true;
+                if (index === q.correct) {
+                    button.classList.add("correct");
+                } else if (index === selected) {
+                    button.classList.add("wrong");
+                }
+            });
+
+            nextButton.style.display = "block";
+        }
+
+        nextButton.onclick = () => {
+            currentQuestion++;
+            if (currentQuestion < questions.length) {
+                loadQuestion();
+                nextButton.style.display = "none";
+            } else {
+                questionElement.textContent = "סיימתם את המשחק!";
+                answersElement.innerHTML = "";
+                nextButton.style.display = "none";
+            }
+        };
+
+        loadQuestion();
+    </script>
+</body>
+</html>
